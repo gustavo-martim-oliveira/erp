@@ -46,7 +46,7 @@ class ExportDatabaseJob implements ShouldQueue
     protected function backupSqlite(string $connection, string $timestamp): void
     {
         $databasePath = config("database.connections.{$connection}.database");
-        $backupPath = storage_path("app/backup_{$timestamp}.sqlite");
+        $backupPath = storage_path("app/database/backup_{$timestamp}.sqlite");
 
         if (!File::exists($databasePath)) {
             throw new Exception("Arquivo SQLite não encontrado em: {$databasePath}");
@@ -57,7 +57,7 @@ class ExportDatabaseJob implements ShouldQueue
 
     protected function backupMysql(string $connection, string $timestamp): void
     {
-        $backupPath = storage_path("app/backup_{$timestamp}.sql");
+        $backupPath = storage_path("app/database/backup_{$timestamp}.sql");
         $handle = fopen($backupPath, 'w+');
 
         fwrite($handle, "SET FOREIGN_KEY_CHECKS=0;\n\n");
@@ -91,7 +91,7 @@ class ExportDatabaseJob implements ShouldQueue
     protected function backupPostgres(string $connection, string $timestamp): void
     {
         $config = config("database.connections.{$connection}");
-        $backupPath = storage_path("app/backup_{$timestamp}.sql");
+        $backupPath = storage_path("app/database/backup_{$timestamp}.sql");
 
         // O pg_dump exige a senha via variável de ambiente do processo
         $env = ['PGPASSWORD' => $config['password']];
