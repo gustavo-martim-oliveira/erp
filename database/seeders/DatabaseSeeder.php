@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Seeders\RoleSuperAdminSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +15,18 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $user = User::firstOrCreate([
+            'email' => 'admin@admin.com',
+        ], [
+            'name' => 'Usuário administrador',
+            'password' => bcrypt('admin'),
         ]);
+
+        $this->call([
+            RoleSuperAdminSeeder::class,
+        ]);
+
+        $user->assignRole('Super Admin');
+        
     }
 }
