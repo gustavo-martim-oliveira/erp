@@ -36,7 +36,7 @@ class AuthController extends Controller
 
         if(auth()->attempt($request->only('email', 'password'), $remember)){
             
-            if(!auth()->user()->is_active || !auth()->user()->is_active == 0    ){
+            if(!auth()->user()->is_active || auth()->user()->is_active === 0){
                 auth()->logout();
                 flash()->error('Seu usuário está inativo, entre em contato com o administrador!');
                 return redirect()->back()->withInput();
